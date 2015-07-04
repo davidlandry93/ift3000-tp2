@@ -186,31 +186,47 @@ module Tp2e15 : TP2E15 = struct
       (* Méthodes à implanter *)
       
       (* ajouter_evenement : evenement -> unit *)
-      method ajouter_evenement (e:evenement) = ()
+      method ajouter_evenement (e:evenement) = 
+          liste_evenements <- (e :: liste_evenements)
 
       (* supprimer_evenement : evenement -> unit *)
-      method supprimer_evenement (e:evenement) = ()
+      method supprimer_evenement (e:evenement) = 
+          liste_evenements <- (enlever e liste_evenements)
 
       (* afficher_systeme_evenements : unit *)
-      method afficher_systeme_evenements = ()
+      method afficher_systeme_evenements = 
+          iter (fun x -> x#afficher_evenement) liste_evenements
 
       (* ajouter_liste_evenements : string list list -> unit *)
-      method ajouter_liste_evenements (lle:string list list) = ()
+      method ajouter_liste_evenements (lle:string list list) = 
+          let f x = liste_evenements <- (new evenement x) :: liste_evenements in
+          iter f lle
 
       (* charger_donnees_sysevenements : string -> unit *)
-      method charger_donnees_sysevenements (fichier:string) = ()
+      method charger_donnees_sysevenements (fichier:string) = 
+          let flux = open_in fichier in
+          let liste = 
+              match (lire_fichier flux "|") with 
+              | [] -> [] 
+              | x::xs -> xs  (* Retirer la tete de la liste parce que c'est le header du csv *)
+          in
+          self#ajouter_liste_evenements liste
 
       (* trouver_selon_arrondissement : string -> evenement list *)
-      method trouver_selon_arrondissement (na:string) = []
+      method trouver_selon_arrondissement (na:string) = 
+          filter (fun x -> x#get_nom_arrondissement = na) liste_evenements
 
       (* trouver_selon_categorie : string -> evenement list *)
-      method trouver_selon_categorie (ge:string) = []
+      method trouver_selon_categorie (ge:string) = 
+          filter (fun x -> x#get_categorie_evenement = ge) liste_evenements
 
       (* lister_arrondissements : string list *)
-      method lister_arrondissements = []
+      method lister_arrondissements = 
+          uniques (map (fun e -> e#get_nom_arrondissement) liste_evenements)
 
       (* lister_categories_evenements : string list *)
-      method lister_categories_evenements = []
+      method lister_categories_evenements = 
+          uniques (map (fun e -> e#get_categorie_evenement) liste_evenements)
 
       (* trier_evenements : int -> unit *)
       method trier_evenements (ordre:int) = ()
