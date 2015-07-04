@@ -229,7 +229,21 @@ module Tp2e15 : TP2E15 = struct
           uniques (map (fun e -> e#get_categorie_evenement) liste_evenements)
 
       (* trier_evenements : int -> unit *)
-      method trier_evenements (ordre:int) = ()
+      method trier_evenements (ordre:int) = 
+          let f = match ordre with
+            | 1 -> fun lhs rhs -> 
+                    compare 
+                        (retourner_epoque_secondes lhs#get_debut_evenement "-")
+                        (retourner_epoque_secondes rhs#get_debut_evenement "-")
+            | 2 -> fun lhs rhs -> 
+                    compare 
+                        (retourner_epoque_secondes lhs#get_fin_evenement "-")
+                        (retourner_epoque_secondes rhs#get_fin_evenement "-")
+            | 3 -> fun lhs rhs -> 
+                    compare lhs#get_cout_evenement rhs#get_cout_evenement
+            | _ -> failwith "trier_evenements: ordre incorrect!"
+          in
+          liste_evenements <- sort f liste_evenements
       
       initializer print_string ("Recherche dans " ^ (parent#get_origine_donnees) ^ 
 				" de " ^ (self#get_ville_concernee) ^ ".");
