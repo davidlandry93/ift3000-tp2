@@ -154,7 +154,15 @@ module Tp2e15 : TP2E15 = struct
       
       (* afficher_evenement : unit *)
       method afficher_evenement = 
-
+        print_string ("Titre: " ^ titre_evenement ^ 
+                "\nCategorie: " ^ categorie_evenement ^ 
+                "\nLieu: " ^ nomlieu_evenement ^ 
+                "\nAdresse: " ^ adresse_evenement ^ 
+                "\nArrondissement: " ^ nom_arrondissement ^ 
+                "\nTelephone: " ^ tel1_evenement ^ 
+                "\nDates: " ^ debut_evenement ^ " au " ^ fin_evenement ^
+                "\nHoraire: " ^ horaire_evenement ^ 
+                "\nCout: " ^ cout_evenement ^ "\n\n")
     end
 
   class sysevenements (od:string) =
@@ -178,34 +186,34 @@ module Tp2e15 : TP2E15 = struct
       (* Méthodes à implanter *)
       
       (* ajouter_evenement : evenement -> unit *)
-      method ajouter_evenement (e:evenement) =
+      method ajouter_evenement (e:evenement) = ()
 
       (* supprimer_evenement : evenement -> unit *)
-      method supprimer_evenement (e:evenement) = 
+      method supprimer_evenement (e:evenement) = ()
 
       (* afficher_systeme_evenements : unit *)
-      method afficher_systeme_evenements = 
+      method afficher_systeme_evenements = ()
 
       (* ajouter_liste_evenements : string list list -> unit *)
-      method ajouter_liste_evenements (lle:string list list) =
+      method ajouter_liste_evenements (lle:string list list) = ()
 
       (* charger_donnees_sysevenements : string -> unit *)
-      method charger_donnees_sysevenements (fichier:string) =
+      method charger_donnees_sysevenements (fichier:string) = ()
 
       (* trouver_selon_arrondissement : string -> evenement list *)
-      method trouver_selon_arrondissement (na:string) =
+      method trouver_selon_arrondissement (na:string) = []
 
       (* trouver_selon_categorie : string -> evenement list *)
-      method trouver_selon_categorie (ge:string) = 
+      method trouver_selon_categorie (ge:string) = []
 
       (* lister_arrondissements : string list *)
-      method lister_arrondissements =
+      method lister_arrondissements = []
 
       (* lister_categories_evenements : string list *)
-      method lister_categories_evenements =
+      method lister_categories_evenements = []
 
       (* trier_evenements : int -> unit *)
-      method trier_evenements (ordre:int) =
+      method trier_evenements (ordre:int) = ()
       
       initializer print_string ("Recherche dans " ^ (parent#get_origine_donnees) ^ 
 				" de " ^ (self#get_ville_concernee) ^ ".");
@@ -222,10 +230,10 @@ module Tp2e15 : TP2E15 = struct
        (* Méthodes à implanter *)
       
       (* sauvegarder_liste_evenements : evenement list -> out_channel -> unit *)     
-      method sauvegarder_liste_evenements (le:evenement list) (flux:out_channel) =
+      method sauvegarder_liste_evenements (le:evenement list) (flux:out_channel) = ()
 
       (* lancer_systeme_evenements : unit *)
-      method lancer_systeme_evenements =
+      method lancer_systeme_evenements = ()
 
       (* lancer_interface_sevenements : unit *)
       method lancer_interface_sevenements =
