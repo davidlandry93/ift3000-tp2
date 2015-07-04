@@ -110,6 +110,17 @@ module Tp2e15 : TP2E15 = struct
     let eg = {Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = dd; tm_mon = mm-1;
 	      tm_year = yyyy-1900; tm_wday = 0; tm_yday = 0; tm_isdst = false} in fst(Unix.mktime eg)
 
+
+    let string_of_evenement x = "Titre: " ^ x#get_titre_evenement ^ 
+        "\nCategorie: " ^ x#get_categorie_evenement ^ 
+        "\nLieu: " ^ x#get_nomlieu_evenement ^ 
+        "\nAdresse: " ^ x#get_adresse_evenement ^ 
+        "\nArrondissement: " ^ x#get_nom_arrondissement ^ 
+        "\nTelephone: " ^ x#get_tel1_evenement ^ 
+        "\nDates: " ^ x#get_debut_evenement ^ " au " ^ x#get_fin_evenement ^
+        "\nHoraire: " ^ x#get_horaire_evenement ^ 
+        "\nCout: " ^ x#get_cout_evenement ^ "\n\n"
+
   (* Classes du TP *)
 
   class evenement (lch:string list) = 
@@ -154,15 +165,7 @@ module Tp2e15 : TP2E15 = struct
       
       (* afficher_evenement : unit *)
       method afficher_evenement = 
-        print_string ("Titre: " ^ titre_evenement ^ 
-                "\nCategorie: " ^ categorie_evenement ^ 
-                "\nLieu: " ^ nomlieu_evenement ^ 
-                "\nAdresse: " ^ adresse_evenement ^ 
-                "\nArrondissement: " ^ nom_arrondissement ^ 
-                "\nTelephone: " ^ tel1_evenement ^ 
-                "\nDates: " ^ debut_evenement ^ " au " ^ fin_evenement ^
-                "\nHoraire: " ^ horaire_evenement ^ 
-                "\nCout: " ^ cout_evenement ^ "\n\n")
+        print_string (string_of_evenement self)
     end
 
   class sysevenements (od:string) =
@@ -256,27 +259,88 @@ module Tp2e15 : TP2E15 = struct
     object(self)
       val nom_fichier = nf
       val interface = i
+      val sys_evenements = new syseve_quebec "toto" "tata"
 
        (* Méthodes à implanter *)
       
       (* sauvegarder_liste_evenements : evenement list -> out_channel -> unit *)     
-      method sauvegarder_liste_evenements (le:evenement list) (flux:out_channel) = ()
+      method sauvegarder_liste_evenements (le:evenement list) (flux:out_channel) = 
+          match le with
+          | [] -> failwith "La liste d'evenements est vide"
+          | _ -> 
+            iter (fun y -> output_string flux (string_of_evenement y)) le
 
       (* lancer_systeme_evenements : unit *)
       method lancer_systeme_evenements = ()
 
       (* lancer_interface_sevenements : unit *)
       method lancer_interface_sevenements =
-	     (* À compléter *)
-	     let top = openTk () in
-	     Wm.title_set top "Système d'événements";
-	     Wm.geometry_set top "370x580";
-	     let l1 = Label.create ~text:"Bienvenue a l'outil de recherche d'événements" top in
-             pack [l1];
-	     let _ = Printexc.print mainLoop () in
-	     print_endline "Merci et au revoir!"
+        (* À compléter *)
+        let top = openTk () in
+        Wm.title_set top "Système d'événements";
+        Wm.geometry_set top "370x580";
+        let tv1 = Textvariable.create () 
+        and tv2 = Textvariable.create () in
+        let l1 = Label.create ~text:"Bienvenue a l'outil de recherche d'événements" top in
+        let lb1 = Listbox.create ~selectmode:`Single top 
+        and lb2 = Listbox.create ~selectmode:`Single top in
 
-      initializer if interface then self#lancer_interface_sevenements else self#lancer_systeme_evenements
+        (* The buttons to update the selected values from the lisboxes *)
+        let b1 = 
+            let liste = sys_evenements#lister_arrondissements in
+            Button.create 
+                ~text:"Afficher arrondissement" 
+                ~command:(fun () ->
+                    try 
+                        let n = 
+                            match (hd (Listbox.curselection lb1)) with
+                            | `Num y -> y
+                            | _ -> failwith "pas de selection"
+                        in
+                        Textvariable.set tv1 (nth liste n)
+                    with _ -> failwith "pas de selection")
+                top in
+        let b2 = 
+            let liste = sys_evenements#lister_categories_evenements in
+            Button.create 
+                ~text:"Afficher categorie" 
+                ~command:(fun () ->
+                    try 
+                        let n = 
+                            match (hd (Listbox.curselection lb2)) with
+                            | `Num y -> y
+                            | _ -> failwith "pas de selection"
+                        in
+                        Textvariable.set tv2 (nth liste n)
+                    with _ -> failwith "pas de selection")
+                top in
+
+        (* The button to show the results. *)
+
+        (* Text labels *)
+        let l2 = Label.create ~text:"Arrondissement selectionne" top 
+        and l3 = Label.create ~text:"Categorie selectionnee" top in
+        let labelArron = Label.create ~textvariable:tv1 top
+        and labelCat = Label.create ~textvariable:tv2 top in
+
+        (* Fill the listboxes *)
+        Listbox.insert ~index:`End ~texts:sys_evenements#lister_arrondissements lb1;
+        Listbox.insert ~index:`End ~texts:sys_evenements#lister_categories_evenements lb2;
+
+        (* Initialize the selected values *)
+        Textvariable.set tv1 "?"; Textvariable.set tv2 "?";
+
+        (* Fill the window *)
+        pack [coe l1; coe lb1; coe lb2; coe b1; coe b2; coe l2; coe labelArron;
+                coe l3; coe labelCat];
+        let _ = Printexc.print mainLoop () in
+        print_endline "Merci et au revoir!"
+
+        initializer 
+            (sys_evenements#charger_donnees_sysevenements nf);
+            if interface 
+            then self#lancer_interface_sevenements 
+            else self#lancer_systeme_evenements
 
     end
 
