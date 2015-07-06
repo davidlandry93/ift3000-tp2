@@ -1,0 +1,200 @@
+Titre: Soiree musicale et dansante pour le 35e anniversaire de l'Harmonie des Cascades et le lancement de sa nouvelle image corporative.
+Categorie: Musique.
+Lieu: Centre de loisirs Monseigneur-De Laval.
+Adresse: 2, rue du Fargy.
+Arrondissement: Beauport.
+Telephone: 418-664-0989.
+Dates: 2015-05-29 au 2015-05-29.
+Horaire: 19 h.
+Cout: Autre.
+
+Titre: L'Amour, la poesie.
+Categorie: Musique.
+Lieu: Centre Monseigneur-De Laval.
+Adresse: 35, avenue du Couvent G1E 6R9 Quebec.
+Arrondissement: Beauport.
+Telephone: 418-666-3349.
+Dates: 2015-06-05 au 2015-06-05.
+Horaire: 20 h.
+Cout: Autre.
+
+Titre: Souper-concert de l'Association lyrique de Beauport.
+Categorie: Musique.
+Lieu: Centre Monseigneur-De Laval.
+Adresse: 35, avenue du Couvent G1E 6R9 Quebec.
+Arrondissement: Beauport.
+Telephone: 418-666-3349.
+Dates: 2015-06-12 au 2015-06-12.
+Horaire: 18 h.
+Cout: Autre.
+
+Titre: Fin de semaine chantante.
+Categorie: Musique.
+Lieu: Centre de loisirs Monseigneur-De Laval.
+Adresse: 2, rue du Fargy.
+Arrondissement: Beauport.
+Telephone: 418-627-9802.
+Dates: 2015-06-19 au 2015-06-21.
+Horaire: De 19 h a 22 h.
+Cout: Gratuit.
+
+Titre: Fin de semaine chantante.
+Categorie: Musique.
+Lieu: Maison Girardin.
+Adresse: 600, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-627-9802.
+Dates: 2015-06-19 au 2015-06-21.
+Horaire: De 19 h a 22 h.
+Cout: Gratuit.
+
+Titre: Fete nationale du Quebec du Pivot.
+Categorie: Musique.
+Lieu: Centre communautaire des Chutes.
+Adresse: 4054, boulevard Sainte-Anne.
+Arrondissement: Beauport.
+Telephone: 418-666-2371.
+Dates: 2015-06-24 au 2015-06-24.
+Horaire: De 11 h a 22 h.
+Cout: Gratuit.
+
+Titre: Quebec en Harmonies.
+Categorie: Musique.
+Lieu: Maison Girardin.
+Adresse: 600, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-880-2848.
+Dates: 2015-06-26 au 2015-06-28.
+Horaire: Vendredi de 19 h a 22 h Samedi et dimanche de 12 h a 17 h et de 19 h a 22 h.
+Cout: Gratuit.
+
+Titre: Fete de la Ville de Quebec - Spectacle Les Studebakers.
+Categorie: Musique.
+Lieu: Maison Girardin.
+Adresse: 600, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6045.
+Dates: 2015-07-03 au 2015-07-03.
+Horaire: Spectacle a 19 h 30 (Il y aura de l'animation pour les enfants avant le spectacle).
+Cout: Gratuit.
+
+Titre: Cordes a l'Opera.
+Categorie: Musique.
+Lieu: Eglise Saint-Louis-de-Courville.
+Adresse: 2315, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6471-3.
+Dates: 2015-07-08 au 2015-07-08.
+Horaire: 19 h.
+Cout: Gratuit.
+
+Titre: Soiree dansante sous les etoiles.
+Categorie: Musique.
+Lieu: Eglise de la Nativite de Notre-Dame de Beauport, perron.
+Adresse: 25, Avenue du Couvent Beauport, QC G1E 6R9.
+Arrondissement: Beauport.
+Telephone: 418-641-6045.
+Dates: 2015-07-10 au 2015-07-10.
+Horaire: De 19 h a 21 h (spectacle et soiree dansante a l'exterieur ) De 21 h a 23 h (Soiree au CLML).
+Cout: Gratuit.
+
+Titre: Spectacle La fievre des Balkans de Boris & les Gitans de Sarajevo.
+Categorie: Musique.
+Lieu: Maison Girardin.
+Adresse: 600, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6045.
+Dates: 2015-07-11 au 2015-07-11.
+Horaire: 19 h 30.
+Cout: Gratuit.
+
+Titre: Musiques pour flute et harpe: itineraires entre orient et occident.
+Categorie: Musique.
+Lieu: Eglise Saint-Louis-de-Courville.
+Adresse: 2315, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6471-3.
+Dates: 2015-07-15 au 2015-07-15.
+Horaire: 19 h.
+Cout: Gratuit.
+
+Titre: Spectacle de Nadja.
+Categorie: Musique.
+Lieu: Maison Girardin.
+Adresse: 600, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6045.
+Dates: 2015-07-18 au 2015-07-18.
+Horaire: 19 h 30.
+Cout: Gratuit.
+
+Titre: Czardas.
+Categorie: Musique.
+Lieu: Eglise Saint-Louis-de-Courville.
+Adresse: 2315, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6471-3.
+Dates: 2015-07-22 au 2015-07-22.
+Horaire: 19 h.
+Cout: Gratuit.
+
+Titre: Jazz'Art 2015.
+Categorie: Musique.
+Lieu: Maison Girardin.
+Adresse: 600, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-664-0989.
+Dates: 2015-07-24 au 2015-07-26.
+Horaire: De 19 h a 22 h Animation.
+Cout: Gratuit.
+
+Titre: Un bestiaire en contes et chansons.
+Categorie: Musique.
+Lieu: Maison Girardin.
+Adresse: 600, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6045.
+Dates: 2015-07-27 au 2015-07-27.
+Horaire: 19 h.
+Cout: Gratuit.
+
+Titre: M'accorderiez-vous cette danse?.
+Categorie: Musique.
+Lieu: Eglise Saint-Louis-de-Courville.
+Adresse: 2315, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6471-3.
+Dates: 2015-07-29 au 2015-07-29.
+Horaire: 19 h.
+Cout: Gratuit.
+
+Titre: Confidence de la musique romantique.
+Categorie: Musique.
+Lieu: Eglise Saint-Louis-de-Courville.
+Adresse: 2315, avenue Royale.
+Arrondissement: Beauport.
+Telephone: 418-641-6471-3.
+Dates: 2015-08-05 au 2015-08-05.
+Horaire: 19 h.
+Cout: Gratuit.
+
+Titre: For me Formidable.
+Categorie: Musique.
+Lieu: Centre de loisirs Monseigneur-De Laval.
+Adresse: 2, rue du Fargy.
+Arrondissement: Beauport.
+Telephone: 418-666-3349.
+Dates: 2015-08-07 au 2015-08-07.
+Horaire: 20 h.
+Cout: Autre.
+
+Titre: Barbara, le temps d'une chanson.
+Categorie: Musique.
+Lieu: Centre de loisirs Monseigneur-De Laval.
+Adresse: 2, rue du Fargy.
+Arrondissement: Beauport.
+Telephone: 418-666-3349.
+Dates: 2015-08-21 au 2015-08-21.
+Horaire: 20 h.
+Cout: Autre.
+

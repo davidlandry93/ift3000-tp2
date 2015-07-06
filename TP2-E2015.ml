@@ -10,8 +10,8 @@
 (*                                                                     *)
 (***********************************************************************)
 (*                                                                     *)
-(* NOM: ___________________________ PRÉNOM:___________________________ *) 
-(* MATRICULE: _____________________ PROGRAMME: _______________________ *)
+(* NOM: Bouchard___________________ PRÉNOM: Frédéric__________________ *) 
+(* MATRICULE: 111 086 988__________ PROGRAMME: IFT____________________ *)
 (*                                                                     *)
 (***********************************************************************)
 
@@ -110,18 +110,25 @@ module Tp2e15 : TP2E15 = struct
     let eg = {Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = dd; tm_mon = mm-1;
 	      tm_year = yyyy-1900; tm_wday = 0; tm_yday = 0; tm_isdst = false} in fst(Unix.mktime eg)
 
-
-    let string_of_evenement x = "Titre: " ^ x#get_titre_evenement ^ 
-        "\nCategorie: " ^ x#get_categorie_evenement ^ 
-        "\nLieu: " ^ x#get_nomlieu_evenement ^ 
-        "\nAdresse: " ^ x#get_adresse_evenement ^ 
-        "\nArrondissement: " ^ x#get_nom_arrondissement ^ 
-        "\nTelephone: " ^ x#get_tel1_evenement ^ 
-        "\nDates: " ^ x#get_debut_evenement ^ " au " ^ x#get_fin_evenement ^
-        "\nHoraire: " ^ x#get_horaire_evenement ^ 
-        "\nCout: " ^ x#get_cout_evenement ^ "\n\n"
-
   (* Classes du TP *)
+
+  
+  let string_of_evenement x = 
+    let cout y = match y with
+    | "0" -> "Gratuit"
+    | "1" -> "Coût à l'entrée"
+    | "2" -> "Autre"
+    | _ -> "Pas affiché"
+    in
+       "Titre: " ^ x#get_titre_evenement ^ ".\n" ^
+       "Categorie: " ^ x#get_categorie_evenement ^ ".\n" ^ 
+       "Lieu: " ^ x#get_nomlieu_evenement ^ ".\n" ^
+       "Adresse: " ^ x#get_adresse_evenement ^ ".\n" ^
+       "Arrondissement: " ^ x#get_nom_arrondissement ^ ".\n" ^
+       "Telephone: " ^ x#get_tel1_evenement ^ ".\n" ^
+       "Dates: " ^ x#get_debut_evenement ^ " au " ^ x#get_fin_evenement ^ ".\n" ^
+       "Horaire: " ^ x#get_horaire_evenement ^ ".\n" ^
+       "Cout: " ^ cout(x#get_cout_evenement) ^ ".\n\n"
 
   class evenement (lch:string list) = 
     object(self)
@@ -165,7 +172,7 @@ module Tp2e15 : TP2E15 = struct
       
       (* afficher_evenement : unit *)
       method afficher_evenement = 
-        print_string (string_of_evenement self)
+	print_string(string_of_evenement self)
     end
 
   class sysevenements (od:string) =
@@ -190,19 +197,21 @@ module Tp2e15 : TP2E15 = struct
       
       (* ajouter_evenement : evenement -> unit *)
       method ajouter_evenement (e:evenement) = 
-          liste_evenements <- (e :: liste_evenements)
+	liste_evenements <- (e :: liste_evenements)
 
       (* supprimer_evenement : evenement -> unit *)
       method supprimer_evenement (e:evenement) = 
-          liste_evenements <- (enlever e liste_evenements)
+         if(appartient e liste_evenements) then liste_evenements <- (enlever e liste_evenements)
+	 else failwith "Le systeme d'evenements ne contient pas cet evenement"
 
       (* afficher_systeme_evenements : unit *)
       method afficher_systeme_evenements = 
-          iter (fun x -> x#afficher_evenement) liste_evenements
+	  if(length liste_evenements <> 0) then iter (fun x -> x#afficher_evenement) liste_evenements
+	  else failwith "Le systeme d'evenements est vide"
 
       (* ajouter_liste_evenements : string list list -> unit *)
       method ajouter_liste_evenements (lle:string list list) = 
-          let f x = liste_evenements <- (new evenement x) :: liste_evenements in
+          let f x = liste_evenements <- liste_evenements @ [new evenement x] in
           iter f lle
 
       (* charger_donnees_sysevenements : string -> unit *)
@@ -217,19 +226,23 @@ module Tp2e15 : TP2E15 = struct
 
       (* trouver_selon_arrondissement : string -> evenement list *)
       method trouver_selon_arrondissement (na:string) = 
-          filter (fun x -> x#get_nom_arrondissement = na) liste_evenements
+	  if(length liste_evenements <> 0) then filter (fun x -> x#get_nom_arrondissement = na) liste_evenements
+	  else failwith "Le systeme d'evenements est vide"
 
       (* trouver_selon_categorie : string -> evenement list *)
       method trouver_selon_categorie (ge:string) = 
-          filter (fun x -> x#get_categorie_evenement = ge) liste_evenements
+          if(length liste_evenements <> 0) then filter (fun x -> x#get_categorie_evenement = ge) liste_evenements
+	  else failwith "Le systeme d'evenements est vide"
 
       (* lister_arrondissements : string list *)
       method lister_arrondissements = 
-          uniques (map (fun e -> e#get_nom_arrondissement) liste_evenements)
+          if(length liste_evenements <> 0) then uniques (map (fun e -> e#get_nom_arrondissement) liste_evenements)
+	  else failwith "Le systeme d'evenements est vide"
 
       (* lister_categories_evenements : string list *)
       method lister_categories_evenements = 
-          uniques (map (fun e -> e#get_categorie_evenement) liste_evenements)
+         if(length liste_evenements <> 0) then uniques (map (fun e -> e#get_categorie_evenement) liste_evenements)
+	 else failwith "Le systeme d'evenements est vide"
 
       (* trier_evenements : int -> unit *)
       method trier_evenements (ordre:int) = 
@@ -259,7 +272,7 @@ module Tp2e15 : TP2E15 = struct
     object(self)
       val nom_fichier = nf
       val interface = i
-      val sys_evenements = new syseve_quebec "toto" "tata"
+      val sys_evenements = new syseve_quebec "les donnees ouvertes" "la ville de Quebec"
 
        (* Méthodes à implanter *)
       
@@ -267,15 +280,93 @@ module Tp2e15 : TP2E15 = struct
       method sauvegarder_liste_evenements (le:evenement list) (flux:out_channel) = 
           match le with
           | [] -> failwith "La liste d'evenements est vide"
-          | _ -> 
-            iter (fun y -> output_string flux (string_of_evenement y)) le
+          | _ ->  iter (fun y -> output_string flux (string_of_evenement y)) le
 
       (* lancer_systeme_evenements : unit *)
-      method lancer_systeme_evenements = ()
+      method lancer_systeme_evenements =
+	ignore (print_string "Quelle categorie d'evenements vous interessent?\n");
+	let arrondissements = sys_evenements#lister_arrondissements
+        and categories = sys_evenements#lister_categories_evenements
+	and failPhrase = "Nombre incorrect, veuillez recommencer!" in
+	   ignore (print_string (formater_chaine categories));
+	   ignore (print_string ("Veuillez entrer un nombre entre 0 et "));
+	   ignore (print_string (string_of_int (length categories) ^ ":? "));
+	   flush stdout;
+	  let choix = 
+	    int_of_string(input_line stdin)
+	  in
+	    if(choix > length categories || choix < 0)
+		then failwith failPhrase
+	    else let choix2 =
+	      ignore (print_string "Quel arrondissement vous interesse?\n");
+	      ignore (print_string (formater_chaine arrondissements));
+	      ignore (print_string ("Veuillez entrer un nombre entre 0 et "));
+	      ignore (print_string (string_of_int (length arrondissements) ^ ":? "));
+	      flush stdout;
+	      int_of_string(input_line stdin)
+	    in
+	      if(choix2 > length arrondissements || choix2 < 0)
+		  then failwith failPhrase
+	      else
+		let requete c1 c2 = match c1, c2 with
+                    | (x, y) when (x = length categories && y = length arrondissements) -> sys_evenements#get_liste_evenements
+		    | (x, _) when (x = length categories) -> sys_evenements#trouver_selon_arrondissement (nth arrondissements choix2)
+		    | (_, y) when (y = length arrondissements) -> sys_evenements#trouver_selon_categorie (nth categories choix)
+		    | (_, _) -> fst(partition(fun x -> appartient x (sys_evenements#trouver_selon_categorie (nth categories choix))) (sys_evenements#trouver_selon_arrondissement (nth arrondissements choix2)))
+		in let resultats = requete choix choix2 in
+		   if(length resultats < 1)
+		       then failwith "Votre recherche n'a donnée aucun résultat"
+		   else
+		     iter(fun x -> x#afficher_evenement) resultats;
+		     ignore (print_string ("Nombre d'evenements trouves: " ^ (string_of_int (length resultats)) ^ "\n\n"));
+		     ignore (print_string ("Voulez-vous trier le resultat de la recherche?\n" ^					                              "1 - Selon la date de debut.\n" ^
+					   "2 - Selon la date de fin.\n" ^
+					   "3 - Selon le cout de l'evenement.\n" ^
+					   "4 - Non, merci!.\n" ^
+					   "Veuillez choisir une option (1 a 4) :? "));	
+		     let choix3 = 
+		       flush stdout;
+		       int_of_string(input_line stdin)
+		     and backup_events = sys_evenements#get_liste_evenements
+		     in
+		       if(choix3 > 4 || choix3 < 0)
+			   then failwith failPhrase
+		       else
+			 if(choix3 < 4)
+			     then begin
+			        ignore (print_string "Voici la liste triee:\n\n");
+		                sys_evenements#set_liste_evenements resultats;
+		                sys_evenements#trier_evenements choix3;
+		                sys_evenements#afficher_systeme_evenements
+			     end;
+
+			 ignore (print_string ("Voulez-vous sauvegarder le resultat de recherche?\n" ^
+					       "1 - Dans un fichier 'Resultat.txt'.\n" ^
+					       "2 - Non merci!.\n" ^
+					       "Veuillez choisir une option (1 ou 2) :? "));
+		         let choix4 = 
+			   flush stdout;
+			   int_of_string(input_line stdin)
+			 in
+			    if(choix4 > 2 || choix4 < 0)
+				then
+			             if(choix3 < 4) then begin
+				       sys_evenements#set_liste_evenements backup_events;
+			               failwith failPhrase
+				     end else failwith failPhrase
+			    else 
+			      if(choix4 < 2) then begin
+				 let monFichier = open_out "Resultat.txt" in
+			             self#sauvegarder_liste_evenements sys_evenements#get_liste_evenements monFichier;
+			             close_out monFichier
+			     end;
+				
+			     if(choix3 < 4) then sys_evenements#set_liste_evenements backup_events
 
       (* lancer_interface_sevenements : unit *)
       method lancer_interface_sevenements =
         (* À compléter *)
+	(sys_evenements#charger_donnees_sysevenements nf);
         let top = openTk () in
         Wm.title_set top "Système d'événements";
         Wm.geometry_set top "370x580";
@@ -337,10 +428,14 @@ module Tp2e15 : TP2E15 = struct
         print_endline "Merci et au revoir!"
 
         initializer 
-            (sys_evenements#charger_donnees_sysevenements nf);
             if interface 
-            then self#lancer_interface_sevenements 
-            else self#lancer_systeme_evenements
+            then begin
+	      ignore (sys_evenements#charger_donnees_sysevenements nf);
+	      self#lancer_interface_sevenements;
+	    end else
+	      ignore (print_string "Bienvenue a l'outil de recherche d'événements\n");
+              ignore (sys_evenements#charger_donnees_sysevenements nf);
+	      self#lancer_systeme_evenements
 
     end
 
