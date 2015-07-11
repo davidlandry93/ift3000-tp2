@@ -131,7 +131,10 @@ module Tp2e15 : TP2E15 = struct
        "Cout: " ^ cout(x#get_cout_evenement) ^ ".\n\n"
 
   let string_of_event_list x = 
-      fold_left (fun a -> (fun e -> a ^ (string_of_evenement e))) "" x 
+      let init_acc = "Nombre d'évènements trouvés: " ^ 
+            (string_of_int (length x)) ^ "\n\n"
+      in
+      fold_left (fun a -> (fun e -> a ^ (string_of_evenement e))) init_acc x 
 
   class evenement (lch:string list) = 
     object(self)
@@ -361,7 +364,8 @@ module Tp2e15 : TP2E15 = struct
 			      if(choix4 < 2) then begin
 				 let monFichier = open_out "Resultat.txt" in
 			             self#sauvegarder_liste_evenements sys_evenements#get_liste_evenements monFichier;
-			             close_out monFichier
+                                     close_out monFichier;
+                                     print_string "\nVeuillez consulter le fichier 'Resultats.txt' dans votre repertoire courant!\n"
 			     end;
 				
 			     if(choix3 < 4) then sys_evenements#set_liste_evenements backup_events
@@ -385,14 +389,16 @@ module Tp2e15 : TP2E15 = struct
             let d = Toplevel.create top in
             begin destroy d; ref d end
         and b_spawn_daughter = Button.create ~text:"Afficher le résultat" top
-        and b_close = Button.create ~text:"Fermer la fenêtre" top in
+        in
         let make_daughter () =
             let d = Toplevel.create top in
             begin
+                let scr = Scrollbar.create ~width:10 d in
                 let topLabel = Label.create ~text:"Résultats de recherche" d
                 and resultBox = Text.create 
                     ~width:80 
                     ~height:80
+                    ~yscrollcommand:(Scrollbar.set scr)
                     d
                 in
                 let eventList = 
@@ -409,7 +415,9 @@ module Tp2e15 : TP2E15 = struct
                 Wm.title_set d "Résultat de recherche";
                 Wm.geometry_set d "500x780";
                 Text.insert (`End,[]) (string_of_event_list eventList) resultBox;
-                pack [coe topLabel; coe resultBox];
+                Scrollbar.configure ~command:(Text.yview resultBox) scr;
+                pack ~side:`Top [topLabel];
+                pack ~side:`Left [coe scr; coe resultBox];
                 daughter := d
             end
         in
@@ -473,14 +481,15 @@ module Tp2e15 : TP2E15 = struct
         print_endline "Merci et au revoir!"
 
         initializer 
-            if (not interface)
+            (if (not interface)
             then begin
-	      ignore (print_string "Bienvenue a l'outil de recherche d'événements\n");
-              ignore (sys_evenements#charger_donnees_sysevenements nf);
+	      (print_string "Bienvenue a l'outil de recherche d'événements\n");
+              (sys_evenements#charger_donnees_sysevenements nf);
 	      self#lancer_systeme_evenements
-	    end else
-	      ignore (sys_evenements#charger_donnees_sysevenements nf);
+            end else begin
+	      (sys_evenements#charger_donnees_sysevenements nf);
 	      self#lancer_interface_sevenements
+            end);
     end
 
 end
