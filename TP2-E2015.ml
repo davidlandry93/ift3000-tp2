@@ -130,6 +130,9 @@ module Tp2e15 : TP2E15 = struct
        "Horaire: " ^ x#get_horaire_evenement ^ ".\n" ^
        "Cout: " ^ cout(x#get_cout_evenement) ^ ".\n\n"
 
+  let string_of_event_list x = 
+      fold_left (fun a -> (fun e -> a ^ (string_of_evenement e))) "" x 
+
   class evenement (lch:string list) = 
     object(self)
       val categorie_evenement : string = nth lch 0
@@ -375,6 +378,42 @@ module Tp2e15 : TP2E15 = struct
         let l1 = Label.create ~text:"Bienvenue a l'outil de recherche d'événements" top in
         let lb1 = Listbox.create ~selectmode:`Single top 
         and lb2 = Listbox.create ~selectmode:`Single top in
+        let arrondissement_selectionne = ref "" 
+        and categorie_selectionnee = ref "" in
+
+        let daughter =
+            let d = Toplevel.create top in
+            begin destroy d; ref d end
+        and b_spawn_daughter = Button.create ~text:"Afficher le résultat" top
+        and b_close = Button.create ~text:"Fermer la fenêtre" top in
+        let make_daughter () =
+            let d = Toplevel.create top in
+            begin
+                let topLabel = Label.create ~text:"Résultats de recherche" d
+                and resultBox = Text.create 
+                    ~width:80 
+                    ~height:80
+                    d
+                in
+                let eventList = 
+                    match !arrondissement_selectionne, !categorie_selectionnee with
+                    | "","" -> sys_evenements#get_liste_evenements
+                    | "", cat -> (sys_evenements#trouver_selon_categorie cat)
+                    | arr, "" -> 
+                        (sys_evenements#trouver_selon_arrondissement arr)
+                    | arr, cat -> 
+                        filter 
+                            (fun x -> x#get_nom_arrondissement = arr)
+                            (sys_evenements#trouver_selon_categorie cat)
+                in
+                Wm.title_set d "Résultat de recherche";
+                Wm.geometry_set d "500x780";
+                Text.insert (`End,[]) (string_of_event_list eventList) resultBox;
+                pack [coe topLabel; coe resultBox];
+                daughter := d
+            end
+        in
+
 
         (* The buttons to update the selected values from the lisboxes *)
         let b1 = 
@@ -388,6 +427,7 @@ module Tp2e15 : TP2E15 = struct
                             | `Num y -> y
                             | _ -> failwith "pas de selection"
                         in
+                        arrondissement_selectionne := (nth liste n);
                         Textvariable.set tv1 (nth liste n)
                     with _ -> failwith "pas de selection")
                 top in
@@ -402,6 +442,7 @@ module Tp2e15 : TP2E15 = struct
                             | `Num y -> y
                             | _ -> failwith "pas de selection"
                         in
+                        categorie_selectionnee := (nth liste n);
                         Textvariable.set tv2 (nth liste n)
                     with _ -> failwith "pas de selection")
                 top in
@@ -414,6 +455,9 @@ module Tp2e15 : TP2E15 = struct
         let labelArron = Label.create ~textvariable:tv1 top
         and labelCat = Label.create ~textvariable:tv2 top in
 
+        (* Configure the buttons. *)
+        Button.configure b_spawn_daughter ~command:(make_daughter); 
+
         (* Fill the listboxes *)
         Listbox.insert ~index:`End ~texts:sys_evenements#lister_arrondissements lb1;
         Listbox.insert ~index:`End ~texts:sys_evenements#lister_categories_evenements lb2;
@@ -423,20 +467,20 @@ module Tp2e15 : TP2E15 = struct
 
         (* Fill the window *)
         pack [coe l1; coe lb1; coe lb2; coe b1; coe b2; coe l2; coe labelArron;
-                coe l3; coe labelCat];
+                coe l3; coe labelCat; coe b_spawn_daughter];
+
         let _ = Printexc.print mainLoop () in
         print_endline "Merci et au revoir!"
 
         initializer 
-            if interface 
+            if (not interface)
             then begin
-	      ignore (sys_evenements#charger_donnees_sysevenements nf);
-	      self#lancer_interface_sevenements;
-	    end else
 	      ignore (print_string "Bienvenue a l'outil de recherche d'événements\n");
               ignore (sys_evenements#charger_donnees_sysevenements nf);
 	      self#lancer_systeme_evenements
-
+	    end else
+	      ignore (sys_evenements#charger_donnees_sysevenements nf);
+	      self#lancer_interface_sevenements
     end
 
 end
