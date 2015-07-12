@@ -298,11 +298,15 @@ module Tp2e15 : TP2E15 = struct
 	   ignore (print_string ("Veuillez entrer un nombre entre 0 et "));
 	   ignore (print_string (string_of_int (length categories) ^ ":? "));
 	   flush stdout;
+
+	  (* choix = Numéro de la catégorie désirée *)
 	  let choix = 
 	    int_of_string(input_line stdin)
 	  in
 	    if(choix > length categories || choix < 0)
 		then failwith failPhrase
+
+	    (* choix2 = Numéro de l'arrondissement désiré *)
 	    else let choix2 =
 	      ignore (print_string "Quel arrondissement vous interesse?\n");
 	      ignore (print_string (formater_chaine arrondissements));
@@ -329,10 +333,21 @@ module Tp2e15 : TP2E15 = struct
 					   "2 - Selon la date de fin.\n" ^
 					   "3 - Selon le cout de l'evenement.\n" ^
 					   "4 - Non, merci!.\n" ^
-					   "Veuillez choisir une option (1 a 4) :? "));	
+					   "Veuillez choisir une option (1 a 4) :? "));
+
+		     (* choix3 = Option de tri *)
 		     let choix3 = 
 		       flush stdout;
 		       int_of_string(input_line stdin)
+
+		     (* backup_event est une variable utilisé pour sauvegarder l'ancienne liste d'événements
+			car cette liste sera altéré par le traitement suivant. Ainsi, à la fin de l'exécution
+			pour s'assurer que la recherche ne commette pas d'effets de bord, nous redéclareront la
+			liste d'événements comme étant cette liste de soutient... 
+			
+			Il aurait été préférable de faire d'autres fonctions pour l'accès, mais pour ne pas
+			ajouter d'autres fonctions que celles requises pas le TP, nous utiliserons cette
+			technique. *)
 		     and backup_events = sys_evenements#get_liste_evenements
 		     in
 		       if(choix3 > 4 || choix3 < 0)
@@ -350,6 +365,8 @@ module Tp2e15 : TP2E15 = struct
 					       "1 - Dans un fichier 'Resultat.txt'.\n" ^
 					       "2 - Non merci!.\n" ^
 					       "Veuillez choisir une option (1 ou 2) :? "));
+
+		         (* choix4 = Exportation des résultats de recherche *)
 		         let choix4 = 
 			   flush stdout;
 			   int_of_string(input_line stdin)
@@ -367,21 +384,28 @@ module Tp2e15 : TP2E15 = struct
                                      close_out monFichier;
                                      print_string "\nVeuillez consulter le fichier 'Resultats.txt' dans votre repertoire courant!\n"
 			     end;
+
+			     print_string "\nMerci et au revoir!\n\n";
 				
 			     if(choix3 < 4) then sys_evenements#set_liste_evenements backup_events
 
       (* lancer_interface_sevenements : unit *)
       method lancer_interface_sevenements =
         (* À compléter *)
-	(sys_evenements#charger_donnees_sysevenements nf);
         let top = openTk () in
         Wm.title_set top "Système d'événements";
         Wm.geometry_set top "370x580";
         let tv1 = Textvariable.create () 
         and tv2 = Textvariable.create () in
         let l1 = Label.create ~text:"Bienvenue a l'outil de recherche d'événements" top in
-        let lb1 = Listbox.create ~selectmode:`Single top 
-        and lb2 = Listbox.create ~selectmode:`Single top in
+        let lb1 = Listbox.create
+		 ~selectmode:`Single
+		 ~width:370
+                 top
+        and lb2 = Listbox.create 
+		  ~selectmode:`Single 
+		  ~width:370 
+                  top in
         let arrondissement_selectionne = ref "" 
         and categorie_selectionnee = ref "" in
 
@@ -396,7 +420,7 @@ module Tp2e15 : TP2E15 = struct
                 let scr = Scrollbar.create ~width:10 d in
                 let topLabel = Label.create ~text:"Résultats de recherche" d
                 and resultBox = Text.create 
-                    ~width:80 
+                    ~width:570 
                     ~height:80
                     ~yscrollcommand:(Scrollbar.set scr)
                     d
@@ -416,55 +440,59 @@ module Tp2e15 : TP2E15 = struct
                 Wm.geometry_set d "500x780";
                 Text.insert (`End,[]) (string_of_event_list eventList) resultBox;
                 Scrollbar.configure ~command:(Text.yview resultBox) scr;
-                pack ~side:`Top [topLabel];
-                pack ~side:`Left [coe scr; coe resultBox];
+		pack ~side:`Left [coe scr] ~fill:`Y;
+                pack ~side:`Top [topLabel] ~fill:`X;
+                pack ~side:`Right [coe resultBox] ~fill:`X;
                 daughter := d
             end
         in
 
+        (* The button to show the results. *)
 
-        (* The buttons to update the selected values from the lisboxes *)
+        (* Text labels *)
+        let l2 = Label.create ~text:"Arrondissement selectionné" top 
+        and l3 = Label.create ~text:"Catégorie selectionnée" top in
+        let labelArron = Label.create ~textvariable:tv1 top
+        and labelCat = Label.create ~textvariable:tv2 top in
+
+	(* The buttons to update the selected values from the lisboxes *)
         let b1 = 
             let liste = sys_evenements#lister_arrondissements in
             Button.create 
                 ~text:"Afficher arrondissement" 
+                ~width:20
                 ~command:(fun () ->
                     try 
                         let n = 
                             match (hd (Listbox.curselection lb1)) with
                             | `Num y -> y
-                            | _ -> failwith "pas de selection"
+                            | _ -> failwith "Pas de selection"
                         in
                         arrondissement_selectionne := (nth liste n);
                         Textvariable.set tv1 (nth liste n)
-                    with _ -> failwith "pas de selection")
+                    with _ -> failwith "Pas de selection")
                 top in
         let b2 = 
             let liste = sys_evenements#lister_categories_evenements in
             Button.create 
                 ~text:"Afficher categorie" 
+                ~width:15
                 ~command:(fun () ->
                     try 
                         let n = 
                             match (hd (Listbox.curselection lb2)) with
                             | `Num y -> y
-                            | _ -> failwith "pas de selection"
+                            | _ -> failwith "Pas de selection"
                         in
                         categorie_selectionnee := (nth liste n);
                         Textvariable.set tv2 (nth liste n)
-                    with _ -> failwith "pas de selection")
+                    with _ -> failwith "Pas de selection")
                 top in
 
-        (* The button to show the results. *)
-
-        (* Text labels *)
-        let l2 = Label.create ~text:"Arrondissement selectionne" top 
-        and l3 = Label.create ~text:"Categorie selectionnee" top in
-        let labelArron = Label.create ~textvariable:tv1 top
-        and labelCat = Label.create ~textvariable:tv2 top in
-
         (* Configure the buttons. *)
-        Button.configure b_spawn_daughter ~command:(make_daughter); 
+        Button.configure b_spawn_daughter 
+               ~command:(make_daughter)
+               ~width:15; 
 
         (* Fill the listboxes *)
         Listbox.insert ~index:`End ~texts:sys_evenements#lister_arrondissements lb1;
@@ -474,8 +502,9 @@ module Tp2e15 : TP2E15 = struct
         Textvariable.set tv1 "?"; Textvariable.set tv2 "?";
 
         (* Fill the window *)
-        pack [coe l1; coe lb1; coe lb2; coe b1; coe b2; coe l2; coe labelArron;
-                coe l3; coe labelCat; coe b_spawn_daughter];
+        pack [coe l1; coe lb1; coe lb2; coe l2; coe labelArron;
+                coe l3; coe labelCat] ~fill:`X;
+	pack [coe b1; coe b2; coe b_spawn_daughter] ~side:`Left ~expand:true ;
 
         let _ = Printexc.print mainLoop () in
         print_endline "Merci et au revoir!"
